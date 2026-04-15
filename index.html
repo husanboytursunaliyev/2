@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web3.js Localhost Demo</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="panel">
+        <div class="status-row">
+          <h1>Web3.js kontrakt paneli</h1>
+          <span id="networkBadge" class="badge">Ulanmagan</span>
+        </div>
+
+        <div class="toolbar">
+          <button id="connectLocalhostButton" type="button">Localhost account ulash</button>
+          <button id="connectButton" type="button">MetaMask ulash</button>
+          <button id="readButton" type="button" disabled>View funksiyani chaqirish</button>
+          <button id="sendButton" type="button" disabled>Tranzaksiya yuborish</button>
+        </div>
+
+        <div class="settings-grid">
+          <label>
+            Kontrakt adresi
+            <input id="contractAddressInput" type="text" autocomplete="off" />
+          </label>
+          <label>
+            View funksiya
+            <input id="viewFunctionInput" type="text" value="getValue" autocomplete="off" />
+          </label>
+          <label>
+            Send funksiya
+            <input id="sendFunctionInput" type="text" value="setValue" autocomplete="off" />
+          </label>
+          <label>
+            Send qiymati
+            <input id="sendValueInput" type="text" value="42" autocomplete="off" />
+          </label>
+          <label>
+            Gas limit
+            <input id="gasLimitInput" type="number" value="100000" min="21000" step="1000" />
+          </label>
+          <label>
+            Gas price, Gwei
+            <input id="gasPriceInput" type="number" value="20" min="1" step="1" />
+          </label>
+        </div>
+
+        <pre id="output" aria-live="polite">Natija shu yerda ko'rinadi.</pre>
+      </section>
+    </main>
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>
