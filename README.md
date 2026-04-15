@@ -1,121 +1,75 @@
-# Web3.js Localhost Smart Contract Demo
+# Testnet Wallet DApp
 
-Bu loyiha Web3.js yordamida lokal Hardhat blockchain bilan ishlash uchun tayyorlangan oddiy demo.
+React/Vite asosidagi oddiy DApp. U Sepolia testnetga ulanadi, uch xil wallet orqali connect qiladi, smart-kontraktdan ma'lumot o'qiydi va forma orqali kontraktga ma'lumot yozadi.
 
-Loyihada quyidagilar bor:
+## Smart-kontrakt interfeysi
 
-- Web3.js kutubxonasi bilan frontend
-- Hardhat localhost node
-- `SimpleStorage` smart-kontrakti
-- ABI orqali kontrakt obyektini yaratish
-- `view` funksiyani chaqirish
-- `send` orqali tranzaksiya yuborish
-- Error handling
-- Gas limit va gas price sozlash
-- MetaMask yoki Hardhat localhost account bilan ulanish
+Frontend Sepolia testnetdagi verified `SimpleStorage` kontrakti bilan ishlaydi.
+Default kontrakt adresi:
 
-## Talablar
+```text
+0x91e6c1e10058Ca2DfE80b0F6A796Bab7B094e76B
+```
 
-Kompyuterda quyidagilar o'rnatilgan bo'lishi kerak:
+ABI:
 
-- Node.js
-- npm
-- Git
-- MetaMask, agar MetaMask orqali ishlatilsa
+```solidity
+function get() view returns (uint256)
+function set(uint256 _num)
+```
 
-## O'rnatish
+Namuna kontrakt:
 
-Repository yuklab olingandan keyin dependencylarni o'rnating:
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract SimpleStorage {
+    uint256 private storedNumber;
+
+    function set(uint256 _num) public {
+        storedNumber = _num;
+    }
+
+    function get() public view returns (uint256) {
+        return storedNumber;
+    }
+}
+```
+
+## Ishga tushirish
+
+1. `.env.example` faylini `.env` qilib nusxalang.
+2. `VITE_CONTRACT_ADDRESS` qiymatiga Sepolia testnetdagi kontrakt adresini yozing. Default demo kontrakt allaqachon berilgan.
+3. WalletConnect ishlatish uchun `VITE_WALLETCONNECT_PROJECT_ID` qiymatini kiriting.
+4. Paketlarni o'rnating va lokal serverni ishga tushiring:
 
 ```bash
 npm install
-```
-
-## Hardhat Node Ishga Tushirish
-
-Birinchi terminalda lokal blockchainni ishga tushiring:
-
-```bash
-npm run node
-```
-
-Bu terminalni yopmang. Hardhat sizga 10000 ETH bor test accountlarni chiqaradi.
-
-## Kontraktni Deploy Qilish
-
-Ikkinchi terminalda kontraktni deploy qiling:
-
-```bash
-npm run deploy
-```
-
-Terminalda shunga o'xshash natija chiqadi:
-
-```text
-SimpleStorage deployed to: 0x5FbDB2315678afecb367f032d93F642f64180aa3
-```
-
-Shu addressni saytdagi **Kontrakt adresi** inputiga kiriting.
-
-Muhim: Hardhat account addressini kontrakt address o'rniga kiritmang. Account addresslar yonida odatda `10000 ETH` yoziladi. Kontrakt address esa `npm run deploy` natijasida chiqadi.
-
-## Frontendni Ishga Tushirish
-
-Uchinchi terminalda frontend serverni ishga tushiring:
-
-```bash
 npm run dev
 ```
 
-Brauzerda oching:
+Vite odatda `http://127.0.0.1:5173` manzilida ochiladi.
 
-```text
-http://127.0.0.1:5173
-```
+## Deploy
 
-## Ishlatish
-
-Eng oson yo'l:
-
-1. `npm run node` ishlayotgan bo'lsin.
-2. `npm run deploy` orqali kontrakt address oling.
-3. Frontendda contract addressni kiriting.
-4. **Localhost account ulash** tugmasini bosing.
-5. **View funksiyani chaqirish** orqali `getValue()` natijasini oling.
-6. **Tranzaksiya yuborish** orqali `setValue(42)` tranzaksiyasini yuboring.
-7. Yana **View funksiyani chaqirish** bosib qiymat o'zgarganini tekshiring.
-
-## MetaMask Bilan Ishlatish
-
-MetaMask network sozlamasi:
-
-```text
-Network name: Hardhat Localhost 31337
-RPC URL: http://127.0.0.1:8545
-Chain ID: 31337
-Currency symbol: ETH
-```
-
-Hardhat terminalida chiqqan private keylardan birini MetaMaskga import qiling. Shunda accountda 10000 ETH bo'ladi.
-
-## Asosiy Fayllar
-
-- `contracts/SimpleStorage.sol` - smart-kontrakt
-- `scripts/deploy.js` - deploy script
-- `hardhat.config.js` - Hardhat konfiguratsiyasi
-- `src/contractAbi.json` - kontrakt ABI fayli
-- `src/app.js` - Web3.js logikasi
-- `index.html` - frontend sahifa
-
-## Foydali Buyruqlar
+### Vercel
 
 ```bash
-npm run node
-npm run deploy
-npm run dev
 npm run build
+vercel
 ```
 
-## Eslatma
+Vercel dashboardda environment variables sifatida `VITE_CONTRACT_ADDRESS`, `VITE_WALLETCONNECT_PROJECT_ID` va kerak bo'lsa `VITE_SEPOLIA_RPC_URL` ni qo'shing.
 
-Hardhat node qayta ishga tushirilsa, kontraktlar ham qayta deploy qilinishi kerak. Shuning uchun `npm run node` ni qayta ishga tushirgandan keyin yana `npm run deploy` qiling va yangi contract addressni frontendga kiriting.
+### GitHub Pages
+
+Repo rootiga quyidagi command bilan deploy qilish mumkin:
+
+```bash
+npm run build
+npm install --save-dev gh-pages
+npx gh-pages -d dist
+```
+
+GitHub Pages uchun Vite base path kerak bo'lsa, `vite.config.js` ichidagi `base` qiymatini repo nomiga moslang.
